@@ -31,58 +31,27 @@ class UserFilterListContainer extends Component {
 				currentValue: this.getActualCurrentData()
 			});
 		});
+		
+		this.socket.on('room_actual_data', (params) => {
+			
+		});
 	}
 	
-	getActualCurrentData() {
-		return {};
-	}
-
-	chartList() {
-		return [
-			{
-				data: [
-					{time: '13:00', value: '23'},
-					{time: '13:10', value: '24'},
-					{time: '13:20', value: '25'},
-					{time: '13:30', value: '26'},
-					{time: '13:40', value: '27'},
-					{time: '13:50', value: '28'},
-					{time: '14:00', value: '29'},
-				],
-			},
-			{
-				data: [
-					{time: '13:00', value: '600'},
-					{time: '13:10', value: '700'},
-					{time: '13:20', value: '800'},
-					{time: '13:30', value: '900'},
-					{time: '13:40', value: '1000'},
-					{time: '13:50', value: '1300'},
-					{time: '14:00', value: '1500'},
-				],
-			},
-			{
-				data: [
-					{time: '13:00', value: '500'},
-					{time: '13:10', value: '550'},
-					{time: '13:20', value: '600'},
-					{time: '13:30', value: '650'},
-					{time: '13:40', value: '700'},
-					{time: '13:50', value: '750'},
-					{time: '14:00', value: '800'},
-				],
-			},
-		];
+	getActualCurrentData(params) {
+		return this.state.chartList.map(({id, name, measure}) => ({
+			id,
+			name,
+			measure,
+		}));
 	}
 
 	render() {
 		const chartList = this.state.chartList;
 		const dataList = this.chartList();
-		console.log(chartList);
 		return (
 			<div className="root">
 				<div className="currentValueContainer">
-					<ParamListContainer currentValue={this.state.currentValue}/>
+					<ParamListContainer values={this.state.currentValue}/>
 				</div>
 				<div className="chartContainer">
 					{chartList[0] ? <ParamChart

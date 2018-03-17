@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import FontAwesome from 'react-fontawesome';
 
 const ParamView = ({
-                       title,
+                       name,
                        value,
                        measure,
+	
                        color,
                        icon,
                    }) => {
@@ -24,7 +25,7 @@ const ParamView = ({
 				/>
 			</div>
 			<div className="text">
-				<div className="paramTitle" style={{color: color}}>{title}</div>
+				<div className="paramTitle" style={{color: color}}>{name}</div>
 				<div>{value} {!!measure ? (measure) : null}</div>
 			</div>
 		</div>
@@ -32,10 +33,11 @@ const ParamView = ({
 };
 
 ParamView.propTypes = {
-	title: PropTypes.string.isRequired,
+	name: PropTypes.string.isRequired,
 	value: PropTypes.number,
 	measure: PropTypes.string,
 	color: PropTypes.string,
+	icon: PropTypes.string.isRequired,
 };
 
 export default ParamView;
