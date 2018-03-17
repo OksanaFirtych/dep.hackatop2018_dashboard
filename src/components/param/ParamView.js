@@ -9,31 +9,33 @@ const ParamView = ({
                        color,
                        icon,
                    }) => {
-
-    return (
-        <div className="param">
-            <div className="icon" style={{backgroundColor: color}}>
-                <FontAwesome
-                    name={icon}
-                    style={{
-                        color: '#fff',
-                        fontWeight: 'bold',
-                    }}
-                />
-            </div>
-            <div className="text">
-                <div>{title}</div>
-                <div>{`${value}${!!measure ? (measure) : null}`}</div>
-            </div>
-        </div>
-    );
+	return (
+		<div className="param">
+			<div className="icon" style={{backgroundColor: color}}>
+				<FontAwesome
+					name={icon}
+					size="2x"
+					style={
+						{
+							color: '#fff',
+							fontWeight: 'bold',
+						}
+					}
+				/>
+			</div>
+			<div className="text">
+				<div className="paramTitle" style={{color: color}}>{title}</div>
+				<div>{value} {!!measure ? (measure) : null}</div>
+			</div>
+		</div>
+	);
 };
 
 ParamView.propTypes = {
-    title: PropTypes.string.isRequired,
-    value: PropTypes.number,
-    measure: PropTypes.string,
-    color: PropTypes.string,
+	title: PropTypes.string.isRequired,
+	value: PropTypes.number,
+	measure: PropTypes.string,
+	color: PropTypes.string,
 };
 
 export default ParamView;
