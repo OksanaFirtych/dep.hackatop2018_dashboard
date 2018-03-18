@@ -135,7 +135,7 @@ class ParamChart extends Component {
 					{ id: 'comfort', value: 'Comfort range', type: 'square', color: '#82ca9d'},
 					{ id: 'hystory', value: 'Historical data', type: 'line', color: '#ff7300'},
 					{ id: 'wnidow_open', value: 'Window open', type: 'line', color: 'green'},
-					{ id: 'wnidow_close', value: 'Window open', type: 'line', color: 'red'},
+					{ id: 'wnidow_close', value: 'Window close', type: 'line', color: 'red'},
 				]}
 			/>
 			<CartesianGrid stroke='#f5f5f5'/>
