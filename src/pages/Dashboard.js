@@ -71,6 +71,7 @@ class UserFilterListContainer extends Component {
 			historyData,
 			chartList,
 			currentValueList,
+			eventList,
 		} = this.state;
 
 		chartList.forEach(chart => {
@@ -82,12 +83,18 @@ class UserFilterListContainer extends Component {
 				});
 				historyData[chart.id].shift();
 				currentValueList[chart.id] = params[0][chart.id];
-				
+				if (params[0].event) {
+					eventList.push({value: params[0].event, time: timeStr});
+					if (eventList[0].time < historyData[chart.id][0].time) {
+						eventList.shift();
+					}
+				}
 			}
 		});
 		this.setState({
 			historyData,
 			currentValueList,
+			eventList,
 		});
 	};
 	
