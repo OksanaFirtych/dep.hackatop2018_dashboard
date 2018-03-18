@@ -14,6 +14,7 @@ import {
 } from 'recharts';
 
 import ParamChartDot from './ParamChartDot.js';
+import ParamChartVerticalLabel from './ParamChartVerticalLabel.js';
 
 class ParamChart extends Component {
 	constructor(props) {
@@ -25,7 +26,6 @@ class ParamChart extends Component {
 	}
 	
 	componentDidMount() {
-		console.log(this.props.data);
 		const chartData = this.props.data ? this.props.data.map(data => ({
 			time: data.time,
 			value: data.value,
@@ -47,7 +47,7 @@ class ParamChart extends Component {
 			const { width, height } = this.getSize();
 			this.setState({
 				width: width + 20,
-				height,
+				height: height,
 				isResized: false,
 			});
 		});
@@ -74,7 +74,7 @@ class ParamChart extends Component {
 	
 	renderChart = () => (
 		<ComposedChart
-			data={this.state.chartData}
+			data={this.props.data}
 			height={this.state.height}
 			width={this.state.width}
 			margin={{top: 20, right: 20, bottom: 20, left: 20}}
@@ -87,8 +87,13 @@ class ParamChart extends Component {
 				</linearGradient>
 			</defs>
 			
-			<XAxis dataKey="time" type="category" scale="utcTime"/>
-			<YAxis type="number"/>
+			<XAxis 
+				dataKey="time"
+				type="category"
+				scale="utcTime"
+				tick={<ParamChartVerticalLabel />}
+			/>
+			<YAxis domain={this.props.domainY} type="number" allowDataOverflow={true}/>
 			<Tooltip/>
 			<Legend
 				wrapperStyle={{
@@ -126,11 +131,11 @@ class ParamChart extends Component {
 	
 	render() {
 		return (
-			<div className={`chart ${this.props.className}`}>
+			<div className="chart">
 				<div className="title">{`${this.props.name} (${this.props.measure})`}</div>
 				<div 
 					ref={(ref) => this._container = ref}
-					className='chartContainer'
+					className='paramChartContainer'
 				>
 					{this.state.isResized ? null : this.renderChart()}
 				</div>

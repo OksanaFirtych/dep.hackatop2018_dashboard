@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import './App.css';
+import './index.css';
 import Dashboard from './pages/Dashboard.js';
 
 class App extends Component {
@@ -9,7 +9,5 @@ class App extends Component {
     );
   };
 };
-
-
 
 export default App;

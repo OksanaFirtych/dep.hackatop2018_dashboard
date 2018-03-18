@@ -6,7 +6,6 @@ const ParamView = ({
                        name,
                        value,
                        measure,
-	
                        color,
                        icon,
                    }) => {

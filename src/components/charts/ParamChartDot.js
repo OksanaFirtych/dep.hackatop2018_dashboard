@@ -11,8 +11,8 @@ const ParamChartDot = ({
 	const viewBox = "0 0 1024 1024";
 	const x = cx - 10;
 	const y = cy - 10;
-	const width = 20;
-	const height = 20;
+	const width = 15;
+	const height = 15;
 	const props = {
 		viewBox,
 		x,
@@ -38,9 +38,9 @@ const ParamChartDot = ({
 ParamChartDot.propTypes = {
 	min: PropTypes.number.isRequired,
 	max: PropTypes.number.isRequired,
-	cx: PropTypes.number.isRequired,
-	cy: PropTypes.number.isRequired,
-	value: PropTypes.number.isRequired,
+	value: PropTypes.number,
+	cx: PropTypes.number,
+	cy: PropTypes.number,
 };
 
 export default ParamChartDot;
