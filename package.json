@@ -1,5 +1,5 @@
 {
-  "name": "hack3",
+  "name": "dashboard",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -10,7 +10,9 @@
     "react-dom": "^16.2.0",
     "react-fontawesome": "^1.6.1",
     "react-scripts": "1.1.1",
-    "recharts": "^1.0.0-beta.10"
+    "react-select": "^1.2.1",
+    "recharts": "^1.0.0-beta.10",
+    "socket.io-client": "^2.0.4"
   },
   "devDependencies": {
     "babel-core": "^6.26.0",
@@ -18,17 +20,14 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-es2015": "^6.24.1",
     "babel-preset-react": "^6.24.1",
+    "create-react-app-sass": "^1.1.0",
     "eslint": "^4.19.0",
-    "html-webpack-plugin": "^3.0.6",
-    "webpack": "^4.1.1",
-    "webpack-cli": "^2.0.11",
-    "webpack-config": "^7.5.0",
-    "webpack-dev-server": "^3.1.1"
+    "html-webpack-plugin": "^3.0.6"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "start": "react-scripts-with-sass start",
+    "build": "react-scripts-with-sass build",
+    "test": "react-scripts-with-sass test --env=jsdom",
+    "eject": "react-scripts-with-sass eject"
   }
 }

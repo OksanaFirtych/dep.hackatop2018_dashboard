@@ -1,5 +1,157 @@
-body {
+html {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  font-family: 'Roboto', sans-serif;
+  background-color: #E6EBEF;
+  display: flex;
+  overflow-x: hidden; }
+
+body, #root {
   margin: 0;
-  padding: 0;
-  font-family: sans-serif;
-}
+  display: flex;
+  flex: 1;
+  overflow-x: hidden; }
+
+body {
+  padding: 20px;
+  box-sizing: padding-box; }
+
+#root {
+  display: flex;
+  align-items: stretch; }
+
+.root {
+  flex: 1;
+  display: flex;
+  flex-direction: column; }
+  .root .topPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; }
+    @media (min-width: 62em) {
+      .root .topPanel {
+        flex-direction: row; } }
+    .root .topPanel .dashControl {
+      display: flex;
+      flex: 1;
+      flex-direction: row;
+      margin-bottom: 20px;
+      align-items: stretch; }
+      @media (min-width: 570px) {
+        .root .topPanel .dashControl {
+          margin-right: 20px; } }
+      .root .topPanel .dashControl .control {
+        margin-right: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between; }
+        @media (min-width: 570px) {
+          .root .topPanel .dashControl .control {
+            justify-content: flex-start; } }
+        .root .topPanel .dashControl .control label {
+          color: #666; }
+      .root .topPanel .dashControl .Select-control {
+        min-width: 100px; }
+  .root .paramContainer {
+    display: flex;
+    flex: 1; }
+    .root .paramContainer .param {
+      flex: 1;
+      display: flex;
+      margin-right: 20px;
+      flex-direction: column;
+      align-items: stretch;
+      justify-content: stretch; }
+      .root .paramContainer .param:last-child {
+        margin-right: 0; }
+      @media (min-width: 570px) {
+        .root .paramContainer .param {
+          flex: 1;
+          flex-direction: row; } }
+      .root .paramContainer .param .icon {
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center; }
+        @media (min-width: 570px) {
+          .root .paramContainer .param .icon {
+            width: 80px; } }
+      .root .paramContainer .param .text {
+        height: auto;
+        flex-direction: column;
+        align-items: flex-start;
+        background-color: white;
+        padding: 10px;
+        line-height: 25px; }
+        @media (min-width: 570px) {
+          .root .paramContainer .param .text {
+            flex: 1;
+            min-width: 100px; } }
+        .root .paramContainer .param .text .paramTitle {
+          display: none; }
+          @media (min-width: 570px) {
+            .root .paramContainer .param .text .paramTitle {
+              display: block; } }
+  .root .chartContainer {
+    flex: 1;
+    display: flex;
+    flex-direction: column; }
+    @media (min-width: 62em) {
+      .root .chartContainer {
+        margin-top: 20px;
+        flex-direction: row; } }
+    .root .chartContainer .leftContainer {
+      flex: 1;
+      background-color: white; }
+      @media (min-width: 62em) {
+        .root .chartContainer .leftContainer {
+          margin-right: 20px; } }
+    .root .chartContainer .rightContainer {
+      flex: 2;
+      display: flex;
+      flex-direction: column; }
+      @media (min-width: 62em) {
+        .root .chartContainer .rightContainer {
+          flex: 1;
+          margin-left: 20px; } }
+    .root .chartContainer .chart {
+      margin-top: 20px;
+      flex-direction: column;
+      display: flex;
+      align-items: stretch;
+      background-color: white;
+      min-height: 350px;
+      flex: 1; }
+      @media (min-width: 62em) {
+        .root .chartContainer .chart {
+          min-height: 0; } }
+      @media (min-width: 62em) {
+        .root .chartContainer .chart {
+          margin-bottom: 20px;
+          margin-top: 0; } }
+      .root .chartContainer .chart .title {
+        font-family: 'Roboto', sans-serif;
+        margin-top: 20px;
+        margin-left: 67px;
+        color: #666;
+        font-size: larger; }
+      .root .chartContainer .chart .paramChartContainer {
+        flex: 1; }
+  .root .verticalLabel {
+    -webkit-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    transform: rotate(90deg); }
+  .root .recharts-reference-area .recharts-label {
+    stroke: #82ca9d; }
+  .root .recharts-reference-line .recharts-label tspan {
+    stroke: red; }
+  .root .xTick {
+    font-size: x-small;
+    fill: #666; }
+  .root .recharts-legend-item-text {
+    color: #666; }
+  .root .recharts-cartesian-axis-tick-value {
+    font-size: x-small; }

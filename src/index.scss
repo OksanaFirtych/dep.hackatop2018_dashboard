@@ -1,0 +1,229 @@
+$mobile: 62em;
+$paramWidth: 570px;
+
+html {
+	width: 100%;
+	height: 100%;
+	display: flex;
+	font-family: 'Roboto', sans-serif;
+	background-color: #E6EBEF;
+	display: flex;
+	overflow-x: hidden;
+}
+
+body, #root {
+	margin: 0;
+	display: flex;
+	flex: 1;
+	overflow-x: hidden;
+}
+
+body {
+	padding: 20px;
+	box-sizing: padding-box;
+}
+
+#root {
+	display: flex;
+	align-items: stretch;
+}
+
+.root {
+	flex: 1;
+	display: flex;
+	flex-direction: column;
+	
+	.topPanel {
+		display: flex;
+		flex-direction: column;
+		justify-content: space-between;
+
+		@media (min-width: $mobile) {
+			flex-direction: row;
+		}
+		
+		.dashControl {
+			display: flex;
+			flex: 1;
+			flex-direction: row;
+			margin-bottom: 20px;
+			align-items: stretch;
+			
+			@media (min-width: $paramWidth) {
+				margin-right: 20px;
+			}
+
+			.control {
+				margin-right: 20px;
+				display: flex;
+				flex-direction: column;
+				justify-content: space-between;
+
+				@media (min-width: $paramWidth) {
+					justify-content: flex-start;
+				}
+				
+				label {
+					color: #666;
+				}
+			}
+			
+			.Select-control {
+				min-width: 100px;
+			}
+		}
+	}
+
+	.paramContainer {
+		display: flex;
+		flex: 1;
+
+		.param {
+			flex: 1;
+			display: flex;
+			margin-right: 20px;
+			flex-direction: column;
+			align-items: stretch;
+			justify-content: stretch;
+
+			&:last-child {
+				margin-right: 0;
+			}
+
+			@media (min-width: $paramWidth) {
+				flex: 1;
+				flex-direction: row;
+			}
+
+			.icon {
+				height: 100%;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+
+				@media (min-width: $paramWidth) {
+					width: 80px;
+				}
+			}
+
+			.text {
+				height: auto;
+				flex-direction: column;
+				align-items: flex-start;
+				background-color: white;
+				padding: 10px;
+				line-height: 25px;
+
+				@media (min-width: $paramWidth) {
+					flex: 1;
+					min-width: 100px;
+				}
+				
+				.paramTitle {
+					display: none;
+
+					@media (min-width: $paramWidth) {
+						display: block;
+					}
+				}
+			}
+		}
+	}
+
+	.chartContainer {
+		flex: 1;
+		display: flex;
+		flex-direction: column;
+
+		@media (min-width: $mobile) {
+			margin-top: 20px;
+			flex-direction: row;
+		}
+
+		.leftContainer {
+			flex: 1;
+			background-color: white;
+
+			@media (min-width: $mobile) {
+				margin-right: 20px;
+			}
+		}
+
+		.rightContainer {
+			flex: 2;
+			display: flex;
+			flex-direction: column;
+
+			@media (min-width: $mobile) {
+				flex: 1;
+				margin-left: 20px;
+			}
+		}
+
+		.chart {
+			margin-top: 20px;
+			flex-direction: column;
+			display: flex;
+			align-items: stretch;
+			background-color: white;
+			min-height: 350px;
+			flex: 1;
+
+			@media (min-width: $mobile) {
+				min-height: 0;
+			}
+
+			@media (min-width: $mobile) {
+				margin-bottom: 20px;
+				margin-top: 0;
+			}
+			
+			.title {
+				font-family: 'Roboto', sans-serif;
+				margin-top: 20px;
+				margin-left: 67px;
+				color: #666;
+				font-size: larger;
+			}
+			
+			.paramChartContainer {
+				flex: 1;
+			}
+		}
+	}
+	
+	.verticalLabel {
+		-webkit-transform: rotate(90deg);
+		-moz-transform: rotate(90deg);
+		-o-transform: rotate(90deg);
+		-ms-transform: rotate(90deg);
+		transform: rotate(90deg);
+	}
+	
+	.recharts-reference-area {
+		.recharts-label {
+			stroke: #82ca9d;
+		}
+	}
+
+	.recharts-reference-line {
+		.recharts-label {
+			tspan {
+				stroke: red;
+			}
+		}
+	}
+	
+	.xTick {
+		font-size: x-small;
+		fill:#666;
+	}
+	
+	.recharts-legend-item-text {
+		color: #666;
+	}
+	
+	.recharts-cartesian-axis-tick-value {
+		font-size: x-small;
+	}
+}

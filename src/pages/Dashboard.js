@@ -4,90 +4,209 @@ import ParamChart from '../components/charts/ParamChart.js';
 
 import ParamListContainer from '../containers/param/ParamListContainer.js';
 
-class UserFilterListContainer extends Component {
-    chartList() {
-        return [
-            {
-                name: 'Temperature',
-                minStandard: 23,
-                maxStandard: 26,
-                data: [
-                    {time: '13:00', value: '23'},
-                    {time: '13:10', value: '24'},
-                    {time: '13:20', value: '25'},
-                    {time: '13:30', value: '26'},
-                    {time: '13:40', value: '27'},
-                    {time: '13:50', value: '28'},
-                    {time: '14:00', value: '29'},
-                ],
-                color: '#FA7151',
-            },
-            {
-                name: 'Humidity',
-                minStandard: 30,
-                maxStandard: 60,
-                data: [
-                    {time: '13:00', value: '25'},
-                    {time: '13:10', value: '30'},
-                    {time: '13:20', value: '25'},
-                    {time: '13:30', value: '30'},
-                    {time: '13:40', value: '25'},
-                    {time: '13:50', value: '30'},
-                    {time: '14:00', value: '25'},
-                ],
-                color: '#FA7151',
-            },
-            {
-                name: 'CO2',
-                minStandard: 600,
-                maxStandard: 1000,
-                data: [
-                    {time: '13:00', value: '600'},
-                    {time: '13:10', value: '700'},
-                    {time: '13:20', value: '800'},
-                    {time: '13:30', value: '900'},
-                    {time: '13:40', value: '1000'},
-                    {time: '13:50', value: '1300'},
-                    {time: '14:00', value: '1500'},
-                ],
-                color: '#FA7151',
-            },
-        ];
-    }
+import DashboardControlPanel from '../components/controls/DashboardControlPanel.js';
 
-    render() {
-        const chartList = this.chartList();
-        return (
-            <div className="root">
-                <div className="currentValueContainer">
-                    <ParamListContainer />
-                </div>
-                <div className="chartContainer">
-                    <ParamChart
-                        className="leftContainer"
-                        key={`chart_${chartList[0].name}`}
-                        {...chartList[0]}
-                        width={600}
-                        height={620}
-                    />
-                    <div className="rightContainer">
-                        <ParamChart
-                            key={`chart_${chartList[1].name}`}
-                            {...chartList[1]}
-                            width={490}
-                            height={300}
-                        />
-                        <ParamChart
-                            key={`chart_${chartList[2].name}`}
-                            {...chartList[2]}
-                            width={490}
-                            height={300}
-                        />
-                    </div>
-                </div>
-            </div>
-        );
-    }
-}
+import io from 'socket.io-client';
+import config from '../config';
+
+class UserFilterListContainer extends Component {
+	constructor(props) {
+		super(props);
+		this.state = this.getInitState();
+	}
+	
+	getInitState() {
+		return {
+			chartList: [],
+			historyData: {},
+			currentValueSettingsList: [],
+			currentValueList: [],
+			dashSettigns: {
+				roomId: 743,
+				count: 30,
+				step: 10000,
+			},
+			eventList: [],
+		};
+	}
+	
+	connectSocket() {
+		this.socket = null;
+		this.socket = io(config.socket);
+
+		this.socket.on('connect', () => {
+			console.log('connect');
+			
+			this.socket.emit('initialize', this.state.dashSettigns);
+			
+			this.socket.on('room_initial_data', this.onRoomInitialData);
+			this.socket.on('room_last_entry', this.onRoomLastEntry);
+			this.socket.on('room_initial_entries', this.onRoomInitialEntries);
+			this.socket.on('room_event', this.onRoomEvent);
+		});
+	}
+
+	onRoomEvent = (params) => {
+		console.log('room_event', params);
+		const {eventList, historyData, chartList} = this.state;
+		const timeStr = this.getTime(params[0].time);
+		eventList.push({value: params[0].name, time: timeStr});
+		if (eventList[0].time < historyData[chartList[0].id][0].time) {
+			eventList.shift();
+		}
+	};
+	
+	onRoomInitialData = (params) => {
+		console.log('room_initial_data', params);
+		this.setState({
+			chartList: params.conditions ? params.conditions : [],
+			currentValueSettingsList: this.getActualCurrentData(params.conditions),
+		});
+	};
+
+	onRoomLastEntry = (params) => {
+		console.log('room_last_entry', params[0]);
+
+		const {
+			historyData,
+			chartList,
+			currentValueList,
+			eventList,
+		} = this.state;
+
+		chartList.forEach(chart => {
+			const timeStr = this.getTime(params[0].time);
+			if (timeStr !== historyData[chart.id][historyData[chart.id].length -1].time) {
+				historyData[chart.id].push({
+					value: params[0][chart.id],
+					time: this.getTime(params[0].time),
+				});
+				historyData[chart.id].shift();
+				currentValueList[chart.id] = params[0][chart.id];
+				if (params[0].event) {
+					eventList.push({value: params[0].event, time: timeStr});
+					if (eventList[0].time < historyData[chart.id][0].time) {
+						eventList.shift();
+					}
+				}
+			}
+		});
+		this.setState({
+			historyData,
+			currentValueList,
+			eventList,
+		});
+	};
+	
+	onRoomInitialEntries = (params) => {
+		console.log('room_initial_entries', params);
+		const chartList = this.state.chartList;
+		const data = {
+			[chartList[0].id]: [],
+			[chartList[1].id]: [],
+			[chartList[2].id]: [],
+		};
+		let currentValueList;
+		const eventList = [];
+		params.forEach((d, index) => {
+			const timeStr = this.getTime(d.time);
+			data[chartList[0].id].push({value: d[chartList[0].id], time: timeStr});
+			data[chartList[1].id].push({value: d[chartList[1].id], time: timeStr});
+			data[chartList[2].id].push({value: d[chartList[2].id], time: timeStr});
+			if (d.event) { 
+				eventList.push({name: d.event, time: timeStr});
+			};
+			if (index === params.length - 1) {
+				currentValueList = {
+					[chartList[0].id]: d[chartList[0].id],
+					[chartList[1].id]: d[chartList[1].id],
+					[chartList[2].id]: d[chartList[2].id],
+				}
+			}
+		});
+		console.log(eventList);
+		this.setState({
+			historyData: data,
+			currentValueList,
+			eventList,
+		});
+	};
+
+	componentDidMount() {
+		this.connectSocket();
+	}
+	
+	getTime(time) {
+		const date = new Date(time);
+		let h = date.getHours().toString();
+		h = h.length === 1 ? '0' + h : h;
+		let m = date.getMinutes().toString();
+		m = m.length === 1 ? '0' + m : m;
+		let s = date.getSeconds().toString();
+		s = s.length === 1 ? '0' + s : s;
+		return `${h}:${m}:${s}`;
+	}
+	
+	getActualCurrentData(params) {
+		return params.map(({id, name, measure}) => ({
+			id,
+			name,
+			measure,
+		}));
+	}
+	
+	changeControl = (dashSettigns) => {
+		console.log(dashSettigns);
+		const newState = this.getInitState();
+		newState.dashSettigns = dashSettigns;
+		this.setState(newState);
+		this.connectSocket();
+	};
+
+	render() {
+		const chartList = this.state.chartList;
+		const historyData = this.state.historyData;
+		
+		return (
+			<div className="root">
+				<div className="topPanel">
+					<DashboardControlPanel {...this.state.dashSettigns} changeHandler={this.changeControl}/>
+					<ParamListContainer 
+						settings={this.state.currentValueSettingsList}
+						values={this.state.currentValueList}
+					/>
+					
+				</div>
+				
+				<div className="chartContainer">
+					{chartList[0] ? <ParamChart
+						className="leftContainer"
+						key={`chart_${chartList[0].id}`}
+						{...chartList[0]}
+						data={historyData[chartList[0].id]}
+						domainY={[15, 30]}
+						eventList={this.state.eventList}
+					/> : null}
+					<div className="rightContainer">
+						{chartList[1] ? <ParamChart
+							key={`chart_${chartList[1].id}`}
+							{...chartList[1]}
+							data={historyData[chartList[1].id]}
+							domainY={[400, 1500]}
+							eventList={this.state.eventList}
+						/> : null}
+						{chartList[2] ? <ParamChart
+							key={`chart_${chartList[2].id}`}
+							{...chartList[2]}
+							data={historyData[chartList[2].id]}
+							domainY={[180, 1000]}
+							eventList={this.state.eventList}
+						/> : null}
+					</div>
+				</div>
+			</div>
+		);
+	}
+};
 
 export default UserFilterListContainer;
