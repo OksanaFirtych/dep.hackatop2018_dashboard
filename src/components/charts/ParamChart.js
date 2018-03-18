@@ -16,6 +16,11 @@ import {
 import ParamChartDot from './ParamChartDot.js';
 import ParamChartVerticalLabel from './ParamChartVerticalLabel.js';
 
+const EVENT_NAMES = {
+	WINDOW_CLOSE: 'Window closed',
+	WINDOW_OPEN: 'Window opened',
+};
+
 class ParamChart extends Component {
 	constructor(props) {
 		super(props);
@@ -64,10 +69,11 @@ class ParamChart extends Component {
 		}
 		
 		return this.props.eventList.map(actionData => {
+			console.log('actionData', actionData.name);
 			return (<ReferenceLine 
+				key={`${actionData.name}_${actionData.time}`}
 				x={actionData.time}
-				label={actionData.name}
-				stroke="red"
+				stroke={actionData.name === "WINDOW_OPEN" ? "green" : "red"}
 			/>);
 		});
 	}
@@ -128,6 +134,8 @@ class ParamChart extends Component {
 				payload={[
 					{ id: 'comfort', value: 'Comfort range', type: 'square', color: '#82ca9d'},
 					{ id: 'hystory', value: 'Historical data', type: 'line', color: '#ff7300'},
+					{ id: 'wnidow_open', value: 'Window open', type: 'line', color: 'green'},
+					{ id: 'wnidow_close', value: 'Window open', type: 'line', color: 'red'},
 				]}
 			/>
 			<CartesianGrid stroke='#f5f5f5'/>

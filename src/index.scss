@@ -205,6 +205,14 @@ body {
 			stroke: #82ca9d;
 		}
 	}
+
+	.recharts-reference-line {
+		.recharts-label {
+			tspan {
+				stroke: red;
+			}
+		}
+	}
 	
 	.xTick {
 		font-size: x-small;

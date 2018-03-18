@@ -42,8 +42,19 @@ class UserFilterListContainer extends Component {
 			this.socket.on('room_initial_data', this.onRoomInitialData);
 			this.socket.on('room_last_entry', this.onRoomLastEntry);
 			this.socket.on('room_initial_entries', this.onRoomInitialEntries);
+			this.socket.on('room_event', this.onRoomEvent);
 		});
 	}
+
+	onRoomEvent = (params) => {
+		console.log('room_event', params);
+		const {eventList, historyData, chartList} = this.state;
+		const timeStr = this.getTime(params[0].time);
+		eventList.push({value: params[0].name, time: timeStr});
+		if (eventList[0].time < historyData[chartList[0].id][0].time) {
+			eventList.shift();
+		}
+	};
 	
 	onRoomInitialData = (params) => {
 		console.log('room_initial_data', params);
@@ -60,7 +71,6 @@ class UserFilterListContainer extends Component {
 			historyData,
 			chartList,
 			currentValueList,
-			eventList,
 		} = this.state;
 
 		chartList.forEach(chart => {
@@ -72,18 +82,12 @@ class UserFilterListContainer extends Component {
 				});
 				historyData[chart.id].shift();
 				currentValueList[chart.id] = params[0][chart.id];
-				if (params[0].event) {
-					eventList.push({value: params[0].event.name, time: timeStr});
-					if (eventList[0].time < historyData[chart.id][0].time) {
-						eventList.shift();
-					}
-				}
+				
 			}
 		});
 		this.setState({
 			historyData,
 			currentValueList,
-			eventList,
 		});
 	};
 	
@@ -103,7 +107,7 @@ class UserFilterListContainer extends Component {
 			data[chartList[1].id].push({value: d[chartList[1].id], time: timeStr});
 			data[chartList[2].id].push({value: d[chartList[2].id], time: timeStr});
 			if (d.event) { 
-				eventList.push({name: d.event.name, time: timeStr});
+				eventList.push({name: d.event, time: timeStr});
 			};
 			if (index === params.length - 1) {
 				currentValueList = {
