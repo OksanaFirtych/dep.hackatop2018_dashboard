@@ -72,6 +72,22 @@ class ParamChart extends Component {
 		});
 	}
 	
+	getDomainY() {
+		if (this.props.data) {
+			const values = this.props.data.map(d => d.value);
+			const maxValue = Math.max(...values);
+			const max = Math.max(maxValue, this.props.maxComfortValue);
+			const minValue = Math.min(...values);
+			const min = Math.min(minValue, this.props.minComfortValue);
+
+			const delta = (max - min) / 5;
+
+			return [min - delta, max + delta];
+		}
+
+		return [0, 10];
+	}
+	
 	renderChart = () => (
 		<ComposedChart
 			data={this.props.data}
@@ -93,7 +109,7 @@ class ParamChart extends Component {
 				scale="utcTime"
 				tick={<ParamChartVerticalLabel />}
 			/>
-			<YAxis domain={this.props.domainY} type="number" allowDataOverflow={true}/>
+			<YAxis domain={this.getDomainY()} type="number" allowDataOverflow={true}/>
 			<Tooltip/>
 			<Legend
 				wrapperStyle={{
