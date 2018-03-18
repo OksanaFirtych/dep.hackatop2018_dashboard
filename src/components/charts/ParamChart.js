@@ -59,11 +59,11 @@ class ParamChart extends Component {
 	}
 
 	renderReferenceLines() {
-		if (!this.actionList || !this.actionList.length) {
+		if (!this.props.eventList || !this.props.eventList.length) {
 			return null;
 		}
 		
-		return this.actionList.map(actionData => {
+		return this.props.eventList.map(actionData => {
 			return (<ReferenceLine 
 				x={actionData.time}
 				label={actionData.name}
@@ -81,11 +81,16 @@ class ParamChart extends Component {
 			const min = Math.min(minValue, this.props.minComfortValue);
 
 			const delta = (max - min) / 5;
-
 			return [min - delta, max + delta];
 		}
 
 		return [0, 10];
+	}
+	
+	getDomainX() {
+		if (this.props.data) {
+			return [this.props.data[0].time, this.props.data[this.props.data.length - 1].time];
+		}
 	}
 	
 	renderChart = () => (
@@ -108,6 +113,7 @@ class ParamChart extends Component {
 				type="category"
 				scale="utcTime"
 				tick={<ParamChartVerticalLabel />}
+				domain={this.getDomainX()}
 			/>
 			<YAxis domain={this.getDomainY()} type="number" allowDataOverflow={true}/>
 			<Tooltip/>
@@ -168,6 +174,7 @@ ParamChart.propTypes = {
 	data: PropTypes.array,
 	measure: PropTypes.string,
 	actionList: PropTypes.array,
+	eventList: PropTypes.array,
 };
 
 export default ParamChart;
